@@ -10,3 +10,21 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+
+# -----------------------------
+# CREATE USER
+# -----------------------------
+@app.route("/create_user", methods=["POST"])
+def create_user():
+    data = request.get_json()
+
+    user = User(
+        username=data["username"],
+        email=data["email"]
+    )
+
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({"message": "User created successfully"})
+
