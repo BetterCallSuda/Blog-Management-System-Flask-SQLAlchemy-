@@ -56,3 +56,31 @@ class Post(db.Model):
             "created_at": self.created_at,
             "comments": [comment.to_dict() for comment in self.comments]
         }
+
+
+# -----------------------------
+# COMMENT MODEL
+# -----------------------------
+class Comment(db.Model):
+    __tablename__ = "comments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
+
+    user = db.relationship("User", back_populates="comments")
+    post = db.relationship("Post", back_populates="comments")
+
+    def __repr__(self):
+        return f"<Comment {self.id}>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "text": self.text,
+            "author": self.user.username,
+            "created_at": self.created_at
+        }
