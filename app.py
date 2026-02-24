@@ -78,3 +78,14 @@ def add_comment():
     return jsonify({"message": "Comment added successfully"})
 
 
+# -----------------------------
+# GET ALL POSTS
+# -----------------------------
+@app.route("/posts")
+def get_posts():
+    posts = Post.query.all()
+    return jsonify([post.to_dict() for post in posts])
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
